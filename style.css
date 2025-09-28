@@ -1,0 +1,458 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  background: #f9f9f9;
+  color: #333;
+}
+
+/* ===================== */
+/* === HOMEPAGE HERO === */
+/* ===================== */
+.hero {
+  height: 100vh;
+  background: url("images/home-bg.jpg") center 40% / cover no-repeat;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5%;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1;
+}
+.hero-inner {
+  position: relative;
+  z-index: 3;
+  width: 95%;
+  max-width: 1600px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transform: translate(-2%, -5%);
+}
+.hero-left { flex: 1; }
+.hero-logo-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 60px;
+  border-radius: 60px;
+  background: rgba(0,230,184,0.12);
+  box-shadow: 0 0 70px rgba(0,180,255,0.6);
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+.hero-logo { max-width: 500px; margin-bottom: 15px; }
+.hero-tagline { 
+  color: #d1d5db; font-size: 1rem; font-weight: 400;
+  margin: 5px 0 15px; letter-spacing: 1.5px; text-transform: uppercase;
+}
+.hero-title {
+  font-size: 5.5rem; font-weight: 900; font-style: italic;
+  color: #fff; text-shadow: 0 6px 18px rgba(0, 180, 255, 0.9);
+  margin: 0;
+}
+.hero-right { flex: 1; display: flex; justify-content: flex-end; margin-left: 12%; }
+.hero-menu {
+  list-style: none; display: flex; flex-direction: column; gap: 35px;
+}
+.hero-menu a {
+  position: relative; color: #fff; font-size: 2.4rem;
+  font-weight: 800; text-transform: uppercase;
+  cursor: pointer; transition: color 0.3s ease;
+}
+.hero-menu a::after {
+  content: ""; position: absolute; left: 0; bottom: -6px;
+  width: 0%; height: 3px;
+  background: linear-gradient(90deg, #00e6b8, #4a90e2);
+  box-shadow: 0 0 12px #00e6b8;
+  transition: width 0.3s ease;
+}
+.hero-menu a:hover { color: #00e6b8; }
+.hero-menu a:hover::after { width: 100%; }
+
+/* ===================== */
+/* === MODALS BASE ===== */
+/* ===================== */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 3000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.75);
+  overflow-y: auto;
+  backdrop-filter: blur(3px);
+}
+.modal-content {
+  background: #fff;   /* default white (will override for dark ones) */
+  margin: 3% auto;
+  padding: 2rem;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 1200px;
+  min-height: 80%;
+  animation: slideIn 0.5s ease forwards;
+  transform: translateY(-20px);
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.closeModal {
+  float: right; font-size: 2rem; cursor: pointer; color: #333;
+}
+.closeModal:hover { color: red; }
+
+/* ===================== */
+/* === DARK THEME ====== */
+/* ===================== */
+/* Only apply dark/glow inside the main modals */
+#monitoringModal .modal-content,
+#masterlistModal .modal-content,
+#concernModal .modal-content,
+#performanceModal .modal-content,
+#templatesModal .modal-content {
+  background: #111827;
+  color: #e5e7eb;
+  box-shadow: 0 0 30px rgba(0,230,184,0.3);
+}
+#monitoringModal h2, #monitoringModal h3, #monitoringModal h4,
+#masterlistModal h2, #masterlistModal h3, #masterlistModal h4,
+#concernModal h2, #concernModal h3, #concernModal h4,
+#performanceModal h2, #performanceModal h3, #performanceModal h4,
+#templatesModal h2, #templatesModal h3, #templatesModal h4 {
+  color: #00e6b8;
+}
+
+/* ===================== */
+/* === SHARED LAYOUT === */
+/* ===================== */
+.modal-layout { display: flex; gap: 1.5rem; }
+.modal-sidebar {
+  width: 220px; display: flex; flex-direction: column; gap: 1rem;
+}
+.tab-btn {
+  background: #1f2937; border: none; color: #e5e7eb;
+  padding: 0.8rem 1rem; border-radius: 8px;
+  cursor: pointer; font-weight: 700; text-align: left;
+}
+.tab-btn.active, .tab-btn:hover {
+  background: #00e6b8; color: #111827;
+}
+.modal-main { flex: 1; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ===================== */
+/* === CARDS / TABLE === */
+/* ===================== */
+#monitoringModal .card,
+#masterlistModal .card,
+#concernModal .card,
+#performanceModal .card,
+#templatesModal .card {
+  background: #1e293b;
+  color: #e5e7eb;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.card-header { display: flex; justify-content: space-between; align-items: center; }
+.card-body { margin-top: 0.5rem; }
+
+/* Tables */
+.table-wrap { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th, .data-table td {
+  padding: 0.6rem; border-bottom: 1px solid #374151; text-align: left;
+}
+.data-table thead { background: #111827; color: #fff; }
+
+/* ===================== */
+/* === BADGES ========= */
+/* ===================== */
+.badge { padding: 0.3rem 0.6rem; border-radius: 6px; font-size: 0.8rem; }
+.badge.online { background: #22c55e; }
+.badge.offline { background: #ef4444; }
+.badge.fault { background: #f59e0b; }
+
+/* ===================== */
+/* === TEMPLATES ====== */
+/* ===================== */
+.template-card {
+  background: #1e293b;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+.template-card button {
+  margin-top: 0.5rem; padding: 0.4rem 0.8rem;
+  border: none; border-radius: 6px;
+  background: #00e6b8; color: #111827;
+  font-weight: 700; cursor: pointer;
+}
+/* ---------------- MONITORING ---------------- */
+.mini-controls button {
+  background: #2d89ef;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.mini-controls button:hover {
+  background: #1b5cb8;
+}
+
+.small-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.small-tab {
+  padding: 6px 14px;
+  border-radius: 6px;
+  background: #444;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.small-tab.active,
+.small-tab:hover {
+  background: #2d89ef;
+}
+
+/* ---------------- O&M SEARCH ---------------- */
+#omSearch {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid #666;
+  background: #222;
+  color: #fff;
+  width: 220px;
+}
+#omSearch:focus {
+  outline: none;
+  border-color: #2d89ef;
+  background: #111;
+}
+
+/* O&M Grid */
+.om-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+}
+.om-sidecard {
+  text-align: center;
+  padding: 12px;
+}
+
+/* ---------------- MASTERLIST ---------------- */
+.masterlist-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.masterlist-controls input,
+.masterlist-controls select {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+}
+
+/* ---------------- CONCERN ---------------- */
+.concern-controls {
+  display: flex;
+  gap: 10px;
+}
+.concern-controls input {
+  flex: 1;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid #555;
+}
+.concern-controls button {
+  background: #2d89ef;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.concern-controls button:hover {
+  background: #1b5cb8;
+}
+
+/* ---------------- PERFORMANCE HEADER ---------------- */
+.perf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.perf-controls {
+  display: flex;
+  gap: 10px;
+}
+.perf-controls select,
+.perf-controls button {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+}
+.perf-controls button {
+  background: #2d89ef;
+  color: #fff;
+  border: none;
+}
+.perf-controls button:hover {
+  background: #1b5cb8;
+}
+
+/* ---------------- TEMPLATES ---------------- */
+.template-card {
+  border: 1px solid #ddd;
+  padding: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.template-card:hover {
+  background: #f5f5f5;
+  transform: translateY(-2px);
+}
+/* O&M Date Picker Styling */
+.card-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.date-label {
+  color: #ddd;
+  font-size: 0.9rem;
+}
+
+.date-input {
+  background: #1e293b;   /* same as dark card background */
+  border: 1px solid #334155;
+  color: #f1f5f9;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.date-input:focus {
+  border: 1px solid #14b8a6; /* teal accent same as active tab */
+}
+
+.pdf-list {
+  margin: 10px 0 20px 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.pdf-list.hidden {
+  display: none;
+}
+
+.pdf-list ul li {
+  cursor: pointer;
+  padding: 5px 0;
+  color: #fff;
+  transition: color 0.2s;
+}
+
+.pdf-list ul li:hover {
+  color: #00e6b8;
+}
+.templates-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+}
+
+.template-card {
+  background: #222;
+  padding: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.2s;
+}
+
+.template-card:hover {
+  background: #333;
+}
+
+.pdf-list {
+  margin: 10px 0 20px 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.pdf-list.hidden {
+  display: none;
+}
+
+.pdf-list ul li {
+  cursor: pointer;
+  padding: 5px 0;
+  color: #fff;
+  transition: color 0.2s;
+}
+
+.pdf-list ul li:hover {
+  color: #00e6b8;
+}
+
+/* Modal Styling */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+}
+
+.modal-content {
+  background: #111;
+  margin: 5% auto;
+  padding: 20px;
+  border-radius: 12px;
+  width: 80%;
+  max-width: 900px;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 28px;
+  color: #fff;
+  cursor: pointer;
+}

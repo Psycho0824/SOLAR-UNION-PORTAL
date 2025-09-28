@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Union Solar Internal Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- HERO -->
+  <section id="home" class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-logo-wrapper">
+          <img src="images/logo.png" alt="Union Solar Logo" class="hero-logo" />
+          <p class="hero-tagline">BY PHINMA SOLAR</p>
+          <h1 class="hero-title">AFTERSALES</h1>
+        </div>
+      </div>
+      <div class="hero-right">
+        <ul class="hero-menu">
+          <li><a class="open-modal" data-target="monitoringModal">Monitoring</a></li>
+          <li><a class="open-modal" data-target="masterlistModal">Masterlist</a></li>
+          <li><a class="open-modal" data-target="concernModal">Concern</a></li>
+          <li><a class="open-modal" data-target="performanceModal">Performance Report</a></li>
+          <li><a class="open-modal" data-target="templatesModal">Templates</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- MONITORING Modal -->
+  <div id="monitoringModal" class="modal">
+    <div class="modal-content dark-theme">
+      <span class="closeModal">&times;</span>
+      <div class="modal-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="modal-sidebar">
+          <button class="tab-btn active" data-tab="overviewTab">Monitoring Overview</button>
+          <button class="tab-btn" data-tab="omTab">Solar O&M Monitoring</button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="modal-main">
+          <!-- Monitoring Overview -->
+          <section id="overviewTab" class="tab-content active">
+            <div class="summary-cards-grid">
+              <div class="card summary-card large">
+                <div class="card-header">
+                  <h3>Daily Monitoring</h3>
+                  <div class="mini-controls">
+                    <label for="monitoringDate" class="date-label">Date:</label>
+                    <input type="date" id="monitoringDate" class="date-input">
+                    <button id="refreshMonitoring" class="refresh-btn">⟳ Refresh</button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="small-tabs" role="tablist">
+                    <button class="small-tab active" data-view="summaryView">Summary</button>
+                    <button class="small-tab" data-view="onlinesView">Onlines</button>
+                    <button class="small-tab" data-view="offlinesView">Offlines</button>
+                    <button class="small-tab" data-view="faultView">Fault</button>
+                  </div>
+
+                  <div class="chart-hero">
+                    <canvas id="dailyBarChart"></canvas>
+                  </div>
+
+                  <div class="summary-footer">
+                    <div class="summary-left">
+                      <div class="big-value">Total PV: <span id="summaryTotalPV">0</span> kWh</div>
+                      <div class="small-value">Avg Daily: <span id="summaryAvg">0</span> kWh</div>
+                    </div>
+                    <div class="summary-right">
+                      <div class="status-badges">
+                        <span class="badge online">Online: <b id="countOnline">0</b></span>
+                        <span class="badge offline">Offline: <b id="countOffline">0</b></span>
+                        <span class="badge fault">Fault: <b id="countFault">0</b></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card small">
+                <h4>Site Status</h4>
+                <div class="card-body small-chart">
+                  <canvas id="statusDonutChartSmall"></canvas>
+                  <div class="legend-small">
+                    <div><span class="dot online"></span> Online</div>
+                    <div><span class="dot offline"></span> Offline</div>
+                    <div><span class="dot fault"></span> Fault</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card small">
+                <h4>Performance</h4>
+                <div class="card-body small-chart">
+                  <canvas id="perfMiniLine"></canvas>
+                  <div class="performance-value">Overall: <span id="overallPerf">0%</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Monitoring Table -->
+            <div class="monitoring-table card">
+              <h4>Detailed Monitoring Data</h4>
+              <div class="table-wrap">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Site Name</th>
+                      <th>Realtime</th>
+                      <th>PV Yield (kWh)</th>
+                      <th>Expected (kWh)</th>
+                      <th>Percent</th>
+                      <th>Remarks</th>
+                    </tr>
+                  </thead>
+                  <tbody id="monitoringTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- O&M Tab -->
+<section id="omTab" class="tab-content">
+  <div class="card">
+    <div class="card-header">
+      <h4>Solar O&M Monitoring</h4>
+      <div class="card-actions">
+        <label for="omDate" class="date-label">Date:</label>
+        <input type="date" id="omDate" class="date-input" />
+        <input id="omSearch" class="styled-search" placeholder="🔍 Search site / status..." />
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="om-grid">
+        <!-- Updated Table -->
+        <div class="om-table">
+          <table id="omTable" class="data-table">
+            <thead>
+              <tr>
+                <th>Site Plant Name</th>
+                <th>System Size (kWp)</th>
+                <th>Category</th>
+                <th>Area</th>
+                <th>Address</th>
+                <th>Connection</th>
+                <th>Plant Type</th>
+                <th>Completion Date</th>
+                <th>Contact Person</th>
+                <th>Contact Details</th>
+                <th>Email Address</th>
+              </tr>
+            </thead>
+            <tbody id="omTableBody"></tbody>
+          </table>
+        </div>
+</section>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- MASTERLIST Modal -->
+  <div id="masterlistModal" class="modal">
+    <div class="modal-content light-theme">
+      <span class="closeModal">&times;</span>
+      <div class="masterlist-wrapper">
+        <div class="masterlist-header">
+          <h2>Master List</h2>
+          <div class="masterlist-controls">
+            <input id="masterSearch" class="styled-search" placeholder="🔍 Search name, company, location..." />
+            <select id="masterFilter">
+              <option value="">All Status</option>
+              <option value="ONLINE">Online</option>
+              <option value="OFFLINE">Offline</option>
+              <option value="FAULT">With Fault</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="masterlist-table card">
+          <div class="table-wrap">
+            <table id="masterTable" class="data-table">
+              <thead>
+                <tr>
+                  <th>Lead Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Company</th>
+                  <th>Last Contact</th>
+                  <th>Status</th>
+                  <th>Source</th>
+                </tr>
+              </thead>
+              <tbody id="masterTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCERN Modal -->
+  <div id="concernModal" class="modal">
+    <div class="modal-content dark-theme">
+      <span class="closeModal">&times;</span>
+      <div class="concern-layout">
+        <div class="concern-left card">
+          <div class="card-header">
+            <h3>Client Concerns</h3>
+            <div class="concern-controls">
+              <input id="concernSearch" class="styled-search" placeholder="🔍 Search concern, site, assigned to..." />
+              <button id="newConcernBtn" class="primary-btn">+ New Concern</button>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <table id="concernTable" class="data-table">
+              <thead>
+                <tr>
+                  <th>Date Raised</th><th>Site</th><th>Issue</th><th>Status</th><th>Assigned</th><th>Target Resolution</th>
+                </tr>
+              </thead>
+              <tbody id="concernTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <aside class="concern-right card small">
+          <h4>Quick Stats</h4>
+          <div class="stat-row">
+            <div>Total Concerns<br><b id="totalConcerns">0</b></div>
+            <div>Open<br><b id="openConcerns">0</b></div>
+          </div>
+          <div class="stat-row">
+            <div>Resolved<br><b id="resolvedConcerns">0</b></div>
+            <div>Escalated<br><b id="escalatedConcerns">0</b></div>
+          </div>
+          <h5>Recent</h5>
+          <ul id="recentConcerns"></ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE Modal -->
+  <div id="performanceModal" class="modal">
+    <div class="modal-content gradient-theme">
+      <span class="closeModal">&times;</span>
+      <div class="performance-layout">
+        <header class="perf-header">
+          <h2>Performance Report</h2>
+          <div class="perf-controls">
+            <select id="perfPeriod">
+              <option value="daily">Daily</option>
+              <option value="monthly" selected>Monthly</option>
+              <option value="quarterly">Quarterly</option>
+            </select>
+            <button id="exportPerf" class="primary-btn">Export PDF</button>
+          </div>
+        </header>
+
+        <div class="perf-cards-grid">
+          <div class="card">
+            <h4>Summary</h4>
+            <div class="card-body">
+              <div>Total Energy: <b id="perfTotalEnergy">0</b> kWh</div>
+              <div>Expected: <b id="perfTotalExpected">0</b> kWh</div>
+              <div>Overall Perf: <b id="perfOverallPercent">0%</b></div>
+            </div>
+          </div>
+
+          <div class="card chart-card">
+            <h4>Top Sites</h4>
+            <canvas id="topSitesChart"></canvas>
+          </div>
+
+          <div class="card chart-card">
+            <h4>Performance Trend</h4>
+            <canvas id="perfTrendChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>Detailed Performance Table</h4>
+          <div class="table-wrap">
+            <table id="perfTable" class="data-table">
+              <thead>
+                <tr>
+                  <th>Site</th><th>Capacity (kWp)</th><th>Total Yield</th><th>Expected</th><th>Performance %</th><th>Remarks</th>
+                </tr>
+              </thead>
+              <tbody id="perfTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- TEMPLATES Modal -->
+<div id="templatesModal" class="modal">
+  <div class="modal-content light-theme">
+    <span class="closeModal">&times;</span>
+    <div class="templates-grid">
+      <h2>Templates</h2>
+      <div class="template-cards">
+
+        <!-- SINGLE PDF TEMPLATE -->
+        <div class="template-card open-pdf" data-pdf="data/templates/end-to-end/AFTER-SALES_END_TO_END_PROCESS.pdf">
+          <h4>PSEC After-sales End to End Process</h4>
+        </div>
+
+        <!-- MULTI-PDF TEMPLATE -->
+        <div class="template-card toggle-list" data-target="internetIssueList">
+          <h4>PSEC After-Sales Internet connection issue letter 2025</h4>
+        </div>
+        <div id="internetIssueList" class="pdf-list hidden">
+          <ul>
+            <li class="open-pdf" data-pdf="data/templates/internet-issue/PSEC_After-Sales_Internet_Connection_Issue_Letter-Tulfo_Residence.pdf">Tulfo Residence</li>
+            <li class="open-pdf" data-pdf="data/templates/internet-issue/PSEC_After-Sales_Internet_Connection_Issue_Letter-7kWp_Buildex.pdf">7kWp Buildex</li>
+            <li class="open-pdf" data-pdf="data/templates/internet-issue/PSEC_After-Sales_Internet_Connection_Issue_Letter-Amber_Kinetics.pdf">Amber Kinetics</li>
+            <li class="open-pdf" data-pdf="data/templates/internet-issue/PSEC_After-Sales_Internet_Connection_Issue_Letter-Antonina_Industrial_Corp.pdf">Antonina Industrial Corp.</li>
+            <li class="open-pdf" data-pdf="data/templates/internet-issue/PSEC_After-Sales_Internet_Connection_Issue_Letter-Canlubang_Golf_and_Country_Club.pdf">Canlubang Golf and Country Club</li>
+            <li class="open-pdf" data-pdf="data/templates/internet-issue/PSEC_After-Sales_Internet_Connection_Issue_Letter-Cardines_Residence.pdf">Cardines Residence</li>
+            <li class="open-pdf" data-pdf="data/templates/internet-issue/PSEC_After-Sales_Internet_Connection_Issue_Letter-Cojuangco_Residence.pdf">Cojuangco Residence</li>
+            <li class="open-pdf" data-pdf="data/templates/internet-issue/PSEC_After-Sales_Internet_Connection_Issue_Letter-DLR_Agri_Packaging_Corp.pdf">DLR Agri Packaging Corp.</li>
+            <li class="open-pdf" data-pdf="data/templates/internet-issue/PSEC_After-Sales_Internet_Connection_Issue_Letter-Hilado_Residence.pdf">Hilado Residence</li>
+            <li class="open-pdf" data-pdf="data/templates/internet-issue/PSEC_After-Sales_Internet_Connection_Issue_Letter-Kalinisan_Chemical_Corp.pdf">Kalinisan Chemical Corp.</li>
+            <li class="open-pdf" data-pdf="data/templates/internet-issue/PSEC_After-Sales_Internet_Connection_Issue_Letter-Que_Residence.pdf">Que Residence</li>
+            <li class="open-pdf" data-pdf="data/templates/internet-issue/PSEC_After-Sales_Internet_Connection_Issue_Letter-STMP.pdf">STMP</li>
+            <li class="open-pdf" data-pdf="data/templates/internet-issue/PSEC_After-Sales_Internet_Connection_Issue_Letter-Terrado_Residence.pdf">Terrado Residence</li>
+            <li class="open-pdf" data-pdf="data/templates/internet-issue/PSEC_After-Sales_Internet_Connection_Issue_Letter-Toreja_Solar.pdf">Toreja Solar</li>
+          </ul>
+        </div>
+        <!-- END MULTI-PDF TEMPLATE -->
+
+        <!-- OTHER SINGLE PDF TEMPLATES -->
+        <div class="template-card open-pdf" data-pdf="data/templates/monitoring/MONITORING_ACCOUNTS.pdf">
+          <h4>PSEC Monitoring Accounts</h4>
+        </div>
+
+        <div class="template-card open-pdf" data-pdf="data/templates/turnover/PSEC_Turnover_Presentation_Reference.pdf">
+          <h4>PSEC Turnover Presentation</h4>
+        </div>
+      </div>
+
+      <!-- PDF Viewer Modal -->
+      <div id="pdfViewerModal" class="pdf-modal">
+        <div class="pdf-modal-content">
+          <button id="closePdfViewer">Close</button>
+          <embed id="pdfViewerEmbed" src="" type="application/pdf" width="100%" height="600px" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
